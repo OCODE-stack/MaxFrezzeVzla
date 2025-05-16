@@ -3,629 +3,457 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max Freezer - Configurador Responsive</title>
+    <title>Configurador Max Freezer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', sans-serif;
         }
 
         body {
+            font-family: 'Arial', sans-serif;
             background: #f5f7fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 15px;
+            padding: 20px;
         }
 
-        .form-container {
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
             background: white;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 25px;
-            width: 100%;
-            max-width: 800px;
-            margin: 15px;
+            padding: 30px;
         }
 
         .step {
             display: none;
-            animation: fadeIn 0.5s;
         }
 
         .step.active {
             display: block;
         }
 
+        .form-group {
+            margin-bottom: 25px;
+        }
+
         h2 {
             color: #2c3e50;
-            margin-bottom: 25px;
-            font-size: 1.5em;
-            line-height: 1.4;
+            margin-bottom: 30px;
+            font-size: 1.8em;
         }
 
-        .input-group {
-            margin-bottom: 20px;
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
 
-        input, select {
+        .option-card {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option-card.selected {
+            border-color: #3498db;
+            background: #f8f9ff;
+        }
+
+        .option-card i {
+            font-size: 2em;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        .model-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        input[type="text"], input[type="number"] {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e4e8;
+            border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            margin: 10px 0;
         }
 
-        input:focus, select:focus {
-            border-color: #3498db;
-            outline: none;
+        .custom-size {
+            display: none;
+            margin-top: 15px;
         }
 
-        .btn-group {
+        .button-group {
+            margin-top: 30px;
             display: flex;
-            gap: 12px;
-            margin-top: 25px;
-            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
         }
 
         button {
-            padding: 12px 25px;
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-            flex: 1;
-            min-width: 120px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-        .btn-next {
+        .prev-btn {
+            background: #7f8c8d;
+            color: white;
+        }
+
+        .next-btn {
             background: #3498db;
             color: white;
         }
 
-        .btn-prev {
-            background: #95a5a6;
-            color: white;
-        }
-
-        .btn-submit {
-            background: #27ae60;
-            color: white;
-        }
-
-        .radio-group {
-            display: grid;
-            gap: 15px;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
-
-        .radio-option {
-            min-width: 0;
-        }
-
-        .radio-option input {
-            display: none;
-        }
-
-        .radio-option label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background: #f8f9fa;
-            border: 2px solid #e0e4e8;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            min-height: 140px;
-        }
-
-        .radio-option .icon {
-            font-size: 2em;
-            margin-bottom: 12px;
-            color: #3498db;
-        }
-
-        .radio-option input:checked + label {
-            border-color: #3498db;
-            background: #e3f2fd;
-            transform: translateY(-2px);
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
         }
 
         .progress-bar {
-            display: flex;
-            margin-bottom: 25px;
-            gap: 3px;
-        }
-
-        .progress-step {
-            flex: 1;
-            height: 4px;
-            background: #e0e4e8;
-            border-radius: 2px;
-            transition: background 0.3s;
-        }
-
-        .progress-step.active {
-            background: #3498db;
-        }
-
-        .medidas-group {
-            display: grid;
-            gap: 15px;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-
-        .medida-card {
-            padding: 18px;
-            border: 2px solid #e0e4e8;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .custom-measures {
-            display: none;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-        }
-
-        .custom-measures.active {
-            display: block;
-        }
-
-        .measure-inputs {
-            display: grid;
-            gap: 15px;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        }
-
-        .image-group {
-            display: grid;
-            gap: 15px;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-
-        .image-option label {
-            display: block;
-            border: 2px solid #e0e4e8;
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .image-option img {
             width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-bottom: 2px solid #e0e4e8;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-bottom: 30px;
         }
 
-        .image-option .model-name {
-            padding: 15px;
-            text-align: center;
-            background: #f8f9fa;
-            font-weight: 500;
+        .progress {
+            height: 100%;
+            background: #3498db;
+            border-radius: 4px;
+            transition: width 0.5s ease;
         }
 
-        .material-description {
-            font-size: 0.85em;
-            color: #7f8c8d;
-            margin-top: 10px;
-            line-height: 1.4;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
+        .required-indicator {
+            color: red;
+            margin-left: 3px;
         }
 
         @media (max-width: 768px) {
-            .form-container {
+            .container {
                 padding: 20px;
             }
-
-            h2 {
-                font-size: 1.3em;
-                margin-bottom: 20px;
-            }
-
-            .radio-group, .image-group, .medidas-group {
+            
+            .options-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .radio-option label {
-                min-height: auto;
-                padding: 15px;
-            }
-
-            .image-option img {
-                height: 150px;
-            }
-
-            button {
-                font-size: 14px;
-                padding: 10px 20px;
-            }
-
-            .measure-inputs {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .form-container {
-                padding: 15px;
-                border-radius: 12px;
-            }
-
-            h2 {
-                font-size: 1.2em;
-            }
-
-            .radio-option .icon {
-                font-size: 1.8em;
-            }
-
-            .image-option .model-name {
-                padding: 12px;
-                font-size: 0.9em;
-            }
-
-            .medida-card {
-                padding: 15px;
-            }
-
-            .progress-bar {
-                margin-bottom: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
+    <div class="container">
         <div class="progress-bar">
-            <div class="progress-step active"></div>
-            <div class="progress-step"></div>
-            <div class="progress-step"></div>
-            <div class="progress-step"></div>
-            <div class="progress-step"></div>
+            <div class="progress" style="width: 20%"></div>
         </div>
 
-        <!-- Paso 1 - Nombre -->
-        <div class="step active" id="step1">
-            <h2>Hola, soy Arnel Ospino<br>Asesor de Ventas de Max Freezer<br>¿Cuál es tu nombre?</h2>
-            <div class="input-group">
-                <input type="text" id="nombre" placeholder="Ingresa tu nombre completo" required>
+        <form id="configuratorForm">
+            <!-- Paso 1 - Presentación -->
+            <div class="step active" data-step="1">
+                <h2>👋 Hola! Soy Arnel Ospino, asesor de ventas de Max Freezer</h2>
+                <div class="form-group">
+                    <label>¿Cuál es tu nombre? <span class="required-indicator">*</span></label>
+                    <input type="text" id="nombre" placeholder="Escribe tu nombre completo" required>
+                </div>
             </div>
-            <div class="btn-group">
-                <button type="button" class="btn-next" onclick="nextStep(2)">Siguiente</button>
-            </div>
-        </div>
 
-        <!-- Paso 2 - Tipo de Nevera -->
-        <div class="step" id="step2">
-            <h2 id="step2-title"></h2>
-            <div class="radio-group">
-                <div class="radio-option">
-                    <input type="radio" name="tipo" id="carniceria" value="Carnicería" required>
-                    <label for="carniceria">
-                        <i class="fas fa-drumstick-bite icon"></i>
-                        Carnicería
-                    </label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" name="tipo" id="charcuteria" value="Charcutería">
-                    <label for="charcuteria">
-                        <i class="fas fa-bacon icon"></i>
-                        Charcutería
-                    </label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" name="tipo" id="pasteleria" value="Pastelería">
-                    <label for="pasteleria">
-                        <i class="fas fa-birthday-cake icon"></i>
-                        Pastelería
-                    </label>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn-prev" onclick="prevStep(1)">Anterior</button>
-                <button type="button" class="btn-next" onclick="nextStep(3)">Siguiente</button>
-            </div>
-        </div>
-
-        <!-- Paso 3 - Medidas -->
-        <div class="step" id="step3">
-            <h2>Selecciona las medidas de tu nevera</h2>
-            <div class="medidas-group">
-                <div class="radio-option">
-                    <input type="radio" name="medida" id="medida1" value="100x115x80" onchange="toggleCustomMeasures(false)">
-                    <label for="medida1">
-                        <div class="medida-card">
-                            <h3>Modelo Estándar 1</h3>
-                            <p>100cm (Largo)<br>115cm (Alto)<br>80cm (Profundidad)</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" name="medida" id="medida2" value="120x125x80" onchange="toggleCustomMeasures(false)">
-                    <label for="medida2">
-                        <div class="medida-card">
-                            <h3>Modelo Estándar 2</h3>
-                            <p>120cm (Largo)<br>125cm (Alto)<br>80cm (Profundidad)</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" name="medida" id="medida3" value="150x125x80" onchange="toggleCustomMeasures(false)">
-                    <label for="medida3">
-                        <div class="medida-card">
-                            <h3>Modelo Grande</h3>
-                            <p>150cm (Largo)<br>125cm (Alto)<br>80cm (Profundidad)</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" name="medida" id="custom" value="custom" onchange="toggleCustomMeasures(true)">
-                    <label for="custom">
-                        <div class="medida-card">
-                            <h3>Medidas Personalizadas</h3>
-                            <p>Especifica tus propias medidas</p>
-                        </div>
-                    </label>
-                </div>
-            </div>
-            <div class="custom-measures">
-                <div class="measure-inputs">
-                    <div class="input-group">
-                        <label>Largo (cm)</label>
-                        <input type="number" id="largo" min="50" max="300" required>
+            <!-- Paso 2 - Tipo de Nevera -->
+            <div class="step" data-step="2">
+                <h2>🛒 ¿Qué tipo de nevera exhibidora necesitas? <span class="required-indicator">*</span></h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption(this, 'tipo')">
+                        <i class="fas fa-drumstick-bite"></i>
+                        <h3>Carnicería</h3>
                     </div>
-                    <div class="input-group">
-                        <label>Alto (cm)</label>
-                        <input type="number" id="alto" min="50" max="200" required>
+                    <div class="option-card" onclick="selectOption(this, 'tipo')">
+                        <i class="fas fa-bacon"></i>
+                        <h3>Charcutería</h3>
                     </div>
-                    <div class="input-group">
-                        <label>Profundidad (cm)</label>
-                        <input type="number" id="profundidad" min="50" max="150" required>
+                    <div class="option-card" onclick="selectOption(this, 'tipo')">
+                        <i class="fas fa-birthday-cake"></i>
+                        <h3>Pastelería</h3>
                     </div>
                 </div>
+                <input type="hidden" id="tipoNevera" required>
             </div>
-            <div class="btn-group">
-                <button type="button" class="btn-prev" onclick="prevStep(2)">Anterior</button>
-                <button type="button" class="btn-next" onclick="nextStep(4)">Siguiente</button>
-            </div>
-        </div>
 
-        <!-- Paso 4 - Modelo -->
-        <div class="step" id="step4">
-            <h2>Selecciona el diseño de tu nevera</h2>
-            <div class="image-group">
-                <div class="image-option">
-                    <input type="radio" name="modelo" id="curvo" value="Curvo" required>
-                    <label for="curvo">
-                        <img src="https://i.postimg.cc/QKt5g018/2.jpg" alt="Modelo Curvo">
-                        <div class="model-name">Modelo Curvo</div>
-                    </label>
+            <!-- Paso 3 - Medidas -->
+            <div class="step" data-step="3">
+                <h2>📏 Medidas de la nevera <span class="required-indicator">*</span></h2>
+                <div class="options-grid">
+                    <div class="option-card size-option" onclick="selectSize(this, '100x115x80')">
+                        <h3>Modelo Estándar 1</h3>
+                        <p>100cm Largo × 115cm Alto × 80cm Prof.</p>
+                    </div>
+                    <div class="option-card size-option" onclick="selectSize(this, '120x125x80')">
+                        <h3>Modelo Estándar 2</h3>
+                        <p>120cm Largo × 125cm Alto × 80cm Prof.</p>
+                    </div>
+                    <div class="option-card size-option" onclick="selectSize(this, '150x125x80')">
+                        <h3>Modelo Estándar 3</h3>
+                        <p>150cm Largo × 125cm Alto × 80cm Prof.</p>
+                    </div>
+                    <div class="option-card size-option" onclick="selectSize(this, '200x125x80')">
+                        <h3>Modelo Estándar 4</h3>
+                        <p>200cm Largo × 125cm Alto × 80cm Prof.</p>
+                    </div>
                 </div>
-                <div class="image-option">
-                    <input type="radio" name="modelo" id="semicurvo" value="SemiCurvo">
-                    <label for="semicurvo">
-                        <img src="https://i.postimg.cc/7GX0TpCt/1.jpg" alt="Modelo SemiCurvo">
-                        <div class="model-name">Modelo SemiCurvo</div>
+                
+                <div class="custom-size-control" style="margin-top: 20px;">
+                    <label>
+                        <input type="checkbox" id="customCheck" onchange="toggleCustomSize(this)"> 
+                        ¿Necesitas medidas personalizadas?
                     </label>
+                    
+                    <div class="custom-size-fields" id="customSize" style="display: none; margin-top: 15px;">
+                        <div class="form-group">
+                            <label>Largo (cm) <span class="required-indicator">*</span></label>
+                            <input type="number" id="largo" min="50" max="300" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Alto (cm) <span class="required-indicator">*</span></label>
+                            <input type="number" id="alto" min="50" max="250" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Profundidad (cm) <span class="required-indicator">*</span></label>
+                            <input type="number" id="profundidad" min="50" max="150" required>
+                        </div>
+                    </div>
                 </div>
-                <div class="image-option">
-                    <input type="radio" name="modelo" id="cuadrado" value="Cuadrado">
-                    <label for="cuadrado">
-                        <img src="https://i.postimg.cc/S2mcRyKz/3.jpg" alt="Modelo Cuadrado">
-                        <div class="model-name">Modelo Cuadrado</div>
-                    </label>
-                </div>
+                <input type="hidden" id="selectedSize" required>
             </div>
-            <div class="btn-group">
-                <button type="button" class="btn-prev" onclick="prevStep(3)">Anterior</button>
-                <button type="button" class="btn-next" onclick="nextStep(5)">Siguiente</button>
-            </div>
-        </div>
 
-        <!-- Paso 5 - Materiales -->
-        <div class="step" id="step5">
-            <h2>Selecciona el material interior</h2>
-            <div class="radio-group">
-                <div class="radio-option material-option">
-                    <input type="radio" name="material" id="galvanizado" value="Acero Galvanizado" required>
-                    <label for="galvanizado">
-                        <i class="fas fa-shield-alt icon"></i>
+            <!-- Paso 4 - Modelo -->
+            <div class="step" data-step="4">
+                <h2>🔲 Selecciona el modelo <span class="required-indicator">*</span></h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectModel('Curvo')">
+                        <img src="https://i.postimg.cc/QKt5g018/2.jpg" class="model-image">
+                        <h3>Curvo</h3>
+                    </div>
+                    <div class="option-card" onclick="selectModel('Semicurvo')">
+                        <img src="https://i.postimg.cc/7GX0TpCt/1.jpg" class="model-image">
+                        <h3>Semicurvo</h3>
+                    </div>
+                    <div class="option-card" onclick="selectModel('Cuadrado')">
+                        <img src="https://i.postimg.cc/S2mcRyKz/3.jpg" class="model-image">
+                        <h3>Cuadrado</h3>
+                    </div>
+                </div>
+                <input type="hidden" id="modelo" required>
+            </div>
+
+            <!-- Paso 5 - Materiales -->
+            <div class="step" data-step="5">
+                <h2>🔩 Material del interior <span class="required-indicator">*</span></h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectMaterial('Acero Galvanizado')">
+                        <i class="fas fa-shield-alt"></i>
                         <h3>Acero Galvanizado</h3>
-                        <div class="material-description">
-                            Requiere limpieza constante con agua y vinagre para prevenir oxidación y bacterias
-                        </div>
-                    </label>
-                </div>
-                <div class="radio-option material-option">
-                    <input type="radio" name="material" id="inoxidable" value="Acero Inoxidable">
-                    <label for="inoxidable">
-                        <i class="fas fa-stethoscope icon"></i>
+                        <p>Requiere limpieza constante con agua y vinagre</p>
+                    </div>
+                    <div class="option-card" onclick="selectMaterial('Acero Inoxidable')">
+                        <i class="fas fa-shield-virus"></i>
                         <h3>Acero Inoxidable</h3>
-                        <div class="material-description">
-                            Superficie lisa e higiénica, fácil mantenimiento y aspecto estético
-                        </div>
-                    </label>
-                </div>
-                <div class="radio-option material-option">
-                    <input type="radio" name="material" id="pintura" value="Pintura Protectora Blanca">
-                    <label for="pintura">
-                        <i class="fas fa-paint-roller icon"></i>
+                        <p>Más higiénico y fácil mantenimiento</p>
+                    </div>
+                    <div class="option-card" onclick="selectMaterial('Pintura Protectora Blanca')">
+                        <i class="fas fa-paint-roller"></i>
                         <h3>Pintura Protectora Blanca</h3>
-                        <div class="material-description">
-                            Fácil limpieza y mayor luminosidad interior
-                        </div>
-                    </label>
+                        <p>Máxima luminosidad y fácil limpieza</p>
+                    </div>
                 </div>
+                <input type="hidden" id="material" required>
             </div>
-            <div class="btn-group">
-                <button type="button" class="btn-prev" onclick="prevStep(4)">Anterior</button>
-                <button type="button" class="btn-submit" onclick="submitForm()">Enviar por WhatsApp</button>
+
+            <div class="button-group">
+                <button type="button" class="prev-btn" onclick="prevStep()">← Anterior</button>
+                <button type="button" class="next-btn" onclick="nextStep()">Siguiente →</button>
             </div>
-        </div>
+        </form>
     </div>
 
     <script>
-        function updateProgressBar(currentStep) {
-            const steps = document.querySelectorAll('.progress-step');
-            steps.forEach((step, index) => {
-                step.classList.toggle('active', index < currentStep);
-            });
+        let currentStep = 1;
+        const totalSteps = 5;
+        const formData = {
+            nombre: '',
+            tipo: '',
+            medidas: '',
+            modelo: '',
+            material: ''
+        };
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.querySelector('.progress').style.width = `${progress}%`;
         }
 
-        function toggleCustomMeasures(show) {
-            const customMeasures = document.querySelector('.custom-measures');
-            const measureInputs = customMeasures.querySelectorAll('input');
+        function toggleCustomSize(checkbox) {
+            const customSizeDiv = document.getElementById('customSize');
+            const sizeOptions = document.querySelectorAll('.size-option');
             
-            customMeasures.classList.toggle('active', show);
-            measureInputs.forEach(input => input.required = show);
-            
-            if(!show) {
-                measureInputs.forEach(input => input.value = '');
+            if(checkbox.checked) {
+                customSizeDiv.style.display = 'block';
+                sizeOptions.forEach(opt => opt.classList.remove('selected'));
+                document.getElementById('selectedSize').value = '';
+                formData.medidas = '';
+            } else {
+                customSizeDiv.style.display = 'none';
+                document.querySelectorAll('.custom-size-fields input').forEach(input => {
+                    input.value = '';
+                });
             }
         }
 
-        function nextStep(stepNumber) {
-            const currentStep = document.querySelector('.step.active');
-            let isValid = true;
+        function selectOption(element, type) {
+            document.querySelectorAll(`[data-step="${currentStep}"] .option-card`).forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            formData[type] = element.querySelector('h3').textContent;
+        }
 
-            switch(stepNumber) {
-                case 2:
-                    if(!document.getElementById('nombre').value) {
+        function selectSize(element, size) {
+            document.querySelectorAll('.size-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            document.getElementById('customCheck').checked = false;
+            document.getElementById('customSize').style.display = 'none';
+            formData.medidas = element.querySelector('p').textContent;
+        }
+
+        function selectModel(model) {
+            document.querySelectorAll(`[data-step="4"] .option-card`).forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            formData.modelo = model;
+        }
+
+        function selectMaterial(material) {
+            document.querySelectorAll(`[data-step="5"] .option-card`).forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            formData.material = material;
+        }
+
+        function validateCurrentStep() {
+            switch(currentStep) {
+                case 1:
+                    if(!document.getElementById('nombre').value.trim()) {
                         alert('Por favor ingresa tu nombre');
-                        isValid = false;
+                        return false;
                     }
-                    break;
-                
-                case 3:
-                    if(!document.querySelector('input[name="tipo"]:checked')) {
+                    formData.nombre = document.getElementById('nombre').value;
+                    return true;
+                    
+                case 2:
+                    if(!formData.tipo) {
                         alert('Por favor selecciona un tipo de nevera');
-                        isValid = false;
+                        return false;
                     }
-                    break;
-                
-                case 4:
-                    const medida = document.querySelector('input[name="medida"]:checked');
-                    if(!medida) {
-                        alert('Por favor selecciona una medida');
-                        isValid = false;
-                    }
-                    if(medida && medida.value === 'custom') {
+                    return true;
+                    
+                case 3:
+                    if(document.getElementById('customCheck').checked) {
                         const largo = document.getElementById('largo').value;
                         const alto = document.getElementById('alto').value;
                         const profundidad = document.getElementById('profundidad').value;
+                        
                         if(!largo || !alto || !profundidad) {
                             alert('Por favor completa todas las medidas personalizadas');
-                            isValid = false;
+                            return false;
                         }
+                        formData.medidas = `Personalizado: ${largo}cm Largo × ${alto}cm Alto × ${profundidad}cm Profundidad`;
+                    } else if(!formData.medidas) {
+                        alert('Por favor selecciona una medida estándar');
+                        return false;
                     }
-                    break;
-                
-                case 5:
-                    if(!document.querySelector('input[name="modelo"]:checked')) {
+                    return true;
+                    
+                case 4:
+                    if(!formData.modelo) {
                         alert('Por favor selecciona un modelo');
-                        isValid = false;
+                        return false;
                     }
-                    break;
+                    return true;
+                    
+                case 5:
+                    if(!formData.material) {
+                        alert('Por favor selecciona un material');
+                        return false;
+                    }
+                    return true;
             }
-
-            if(!isValid) return;
-
-            if(stepNumber === 2) {
-                const nombre = document.getElementById('nombre').value;
-                document.getElementById('step2-title').textContent = 
-                    `Hola ${nombre}, ¿qué tipo de nevera exhibidora necesitas?`;
-            }
-
-            currentStep.classList.remove('active');
-            document.getElementById(`step${stepNumber}`).classList.add('active');
-            updateProgressBar(stepNumber);
+            return true;
         }
 
-        function prevStep(stepNumber) {
-            document.querySelector('.step.active').classList.remove('active');
-            document.getElementById(`step${stepNumber}`).classList.add('active');
-            updateProgressBar(stepNumber);
-        }
-
-        function submitForm() {
-            const tipo = document.querySelector('input[name="tipo"]:checked');
-            const medida = document.querySelector('input[name="medida"]:checked');
-            const modelo = document.querySelector('input[name="modelo"]:checked');
-            const material = document.querySelector('input[name="material"]:checked');
-
-            if(!tipo || !medida || !modelo || !material) {
-                alert('Por favor completa todos los campos');
-                return;
-            }
-
-            const data = {
-                nombre: document.getElementById('nombre').value,
-                tipo: tipo.value,
-                medidas: medida.value === 'custom' ? {
-                    largo: document.getElementById('largo').value,
-                    alto: document.getElementById('alto').value,
-                    profundidad: document.getElementById('profundidad').value
-                } : medida.value,
-                modelo: modelo.value,
-                material: material.value
-            };
-
-            let medidasStr = '';
-            if(data.medidas === 'custom') {
-                medidasStr = `Personalizadas:
-- Largo: ${data.medidas.largo}cm
-- Alto: ${data.medidas.alto}cm
-- Profundidad: ${data.medidas.profundidad}cm`;
+        function nextStep() {
+            if(!validateCurrentStep()) return;
+            
+            if(currentStep < totalSteps) {
+                document.querySelector(`[data-step="${currentStep}"]`).classList.remove('active');
+                currentStep++;
+                document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+                updateProgress();
+                updateButtons();
             } else {
-                medidasStr = data.medidas.replace('x', 'cm x').replace('x', 'cm x') + 'cm';
+                generateWhatsAppLink();
             }
-
-            const mensaje = `*SOLICITUD DE NEVERA EXHIBIDORA - MAX FREEZER*
-
-👤 *Nombre:* ${data.nombre}
-📋 *Tipo de Nevera:* ${data.tipo}
-📏 *Medidas:* 
-${medidasStr}
-🎨 *Modelo:* ${data.modelo}
-🔩 *Material Interior:* ${data.material}
-
-*¡Gracias por tu solicitud, ${data.nombre}!*
-Arnel Ospino - Asesor Comercial
-📞 +58 412 8939324`;
-
-            const whatsappURL = `https://wa.me/584128939324?text=${encodeURIComponent(mensaje)}`;
-            window.open(whatsappURL, '_blank');
-
-            // Reiniciar formulario
-            document.querySelectorAll('input').forEach(input => {
-                if(input.type !== 'button') input.value = '';
-                if(input.type === 'radio' || input.type === 'checkbox') input.checked = false;
-            });
-            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
-            document.getElementById('step1').classList.add('active');
-            updateProgressBar(1);
         }
+
+        function prevStep() {
+            if(currentStep > 1) {
+                document.querySelector(`[data-step="${currentStep}"]`).classList.remove('active');
+                currentStep--;
+                document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+                updateProgress();
+                updateButtons();
+            }
+        }
+
+        function updateButtons() {
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            
+            prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+            nextBtn.textContent = currentStep === totalSteps ? 'Enviar a WhatsApp' : 'Siguiente';
+        }
+
+        function generateWhatsAppLink() {
+            const message = `¡Hola Arnel! Soy ${formData.nombre} y quiero solicitar una nevera exhibidora.
+            
+- Tipo: ${formData.tipo}
+- Modelo: ${formData.modelo}
+- Medidas: ${formData.medidas}
+- Material: ${formData.material}
+
+¿Podrías ayudarme con mi pedido? Por favor contáctame.`;
+
+            const encodedMessage = encodeURIComponent(message).replace(/'/g, "%27").replace(/"/g, "%22");
+            const whatsappURL = `https://wa.me/584128939324?text=${encodedMessage}`;
+            
+            window.location.href = whatsappURL;
+        }
+
+        // Inicialización
+        updateButtons();
     </script>
 </body>
 </html>
